@@ -7,22 +7,27 @@ var Extension = {
 };
 
 const fileSchema = new mongoose.Schema({
-  uid: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
   },
   description: {
     type: String,
-    required: true,
+    required: false,
+  },
+  data : {
+    type: Buffer,
+    required:true
   },
   extension: {
     type: String,
     enum: Extension,
+    required: false
   },
+  contentType: {
+    type: String,
+    requred: true
+  }
 });
 
 const File = mongoose.model("File", userSchema);
