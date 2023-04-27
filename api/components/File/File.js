@@ -1,34 +1,30 @@
 const mongoose = require("mongoose");
 
 var Extension = {
-  PDF: ".pfd",
+  PDF: ".pdf",
   PNG: ".png",
-  CSV: ".csv",
+  JPG: ".jpg",
+  JPEG: ".jpeg",
 };
 
 const fileSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   description: {
     type: String,
     required: false,
   },
-  data : {
-    type: Buffer,
-    required:true
+  file: {
+    data: Buffer,
   },
   extension: {
     type: String,
     enum: Extension,
-    required: false
-  },
-  contentType: {
-    type: String,
-    requred: true
+    required: false,
   }
 });
 
-const File = mongoose.model("File", userSchema);
+const File = mongoose.model("File", fileSchema);
 module.exports = File;
