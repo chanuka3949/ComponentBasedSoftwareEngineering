@@ -7,17 +7,21 @@ const addressSchema = new mongoose.Schema({
   state: { type: String, default: null },
   country: { type: String, required: true },
   postalCode: { type: String, required: true },
-  contactNumber: { type: Number, required: true },
 });
 
 const userSchema = new mongoose.Schema({
-  uid: {
+  username: {
     type: String,
     required: true,
+    unique:true
   },
   firstName: {
     type: String,
     required: true,
+  },
+  middleName: {
+    type: String,
+    required: false,
   },
   lastName: {
     type: String,
@@ -26,12 +30,20 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique:true
   },
   picture: {
     type: String,
+    required: false,
   },
   address: {
     type: addressSchema,
+    requred: false
+  },
+  contactNumber: {
+    type: Number,
+    required: true,
+    unique:true
   },
 });
 

@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 var Extension = {
-    PDF:'.pfd',
-    PNG:'.png',
-    CSV:'.csv'
-}
+  PDF: ".pfd",
+  PNG: ".png",
+  CSV: ".csv",
+};
 
 const fileSchema = new mongoose.Schema({
   uid: {
@@ -21,8 +21,8 @@ const fileSchema = new mongoose.Schema({
   },
   extension: {
     type: String,
-    enum: Extension
-  }
+    enum: Extension,
+  },
 });
 
 const File = mongoose.model("File", userSchema);
