@@ -23,5 +23,5 @@ app.use("/api/files", FileService);
 connectToDatabase();
 
 app.listen(port, () => {
-  console.log("Server listening on port 3000");
+  console.log(`Server listening on port ${port}`);
 });
