@@ -38,21 +38,17 @@ const upload = multer({
 });
 
 router.get("/:identifier", async (req, res, next) => {
-  // file.find({}).then((data, err) => {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   res.send();
-  // });
-  file
-    .findOne({ referenceDocumentIdentifier: req.params.identifier })
-    .then((fileData, err) => {
-      if (err) {
-        console.log(err);
-      }
-      // console.log({base64:fileData.data.data, contentType:fileData.contentType})
-      res.send({data:fileData.data.data, contentType:fileData.contentType});
+  try {
+    fileData = await file.findOne({
+      referenceDocumentIdentifier: req.params.identifier,
     });
+    if (fileData.data.data === undefined || fileData.contentType == undefined)
+      res.send();
+    else
+      res.send({ data: fileData.data.data, contentType: fileData.contentType });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.post("/", upload.single("file"), async (req, res, next) => {

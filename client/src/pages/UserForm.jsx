@@ -58,12 +58,13 @@ class UserForm extends Component {
     });
   };
 
-  componentDidMount() {
-    this.getProfileData();
-  }
+  // componentDidMount() {
+  //   this.getProfileData();
+  // }
 
-  getProfileData() {
-    axios.get(`http://localhost:5000/api/files/csds`).then(
+  searchData = () => {
+    let searchTerm = this.state.username;
+    axios.get(`http://localhost:5000/api/users/${searchTerm}`).then(
       (response) => {
         this.setState({
           username: response.data.username ?? "",
@@ -72,6 +73,17 @@ class UserForm extends Component {
           middleName: response.data.middleName ?? "",
           lastName: response.data.lastName ?? "",
           contactNumber: response.data.contactNumber ?? "",
+        });
+      },
+      (error) => {
+        if (error.response) {
+          console.log(error.response.data.message);
+        }
+      }
+    );
+    axios.get(`http://localhost:5000/api/files/${this.state.username}`).then(
+      (response) => {
+        this.setState({
           image:
             `data:${response.data.contentType};base64,${Buffer.from(
               response.data.data
@@ -85,26 +97,8 @@ class UserForm extends Component {
         }
       }
     );
-    // axios.get(`http://localhost:5000/api/users/csds`).then(
-    //   (response) => {
-    //     this.setState({
-    //       username: response.data.username ?? "",
-    //       email: response.data.email ?? "",
-    //       firstName: response.data.firstName ?? "",
-    //       middleName: response.data.middleName ?? "",
-    //       lastName: response.data.lastName ?? "",
-    //       contactNumber: response.data.contactNumber ?? "",
-    //       image: response.data.imageData ?? "",
-    //       contentType: response.data.contentType ?? "",
-    //     });
-    //   },
-    //   (error) => {
-    //     if (error.response) {
-    //       console.log(error.response.data.message);
-    //     }
-    //   }
-    // );
-  }
+  };
+
   saveUserDetails = () => {
     let userData = {
       username: this.state.username,
@@ -165,6 +159,13 @@ class UserForm extends Component {
                     type="text"
                     value={this.state.username}
                     onChange={this.handleInput}
+                  />
+                  <Button
+                    as="input"
+                    type="button"
+                    value="Search"
+                    className="button-search"
+                    onClick={this.searchData}
                   />
                 </Form.Group>
               </Col>

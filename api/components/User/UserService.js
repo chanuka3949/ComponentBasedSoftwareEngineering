@@ -16,10 +16,6 @@ router.get("/", async (req, res, next) => {
 router.get("/:username", async (req, res, next) => {
   try {
     let user = await User.findOne({ username: req.params.username });
-
-    if (!user) {
-      res.send("User does not exist in the system");
-    }
     res.send(user);
   } catch (error) {
     console.log(error);
