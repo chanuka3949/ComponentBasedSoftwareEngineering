@@ -30,7 +30,7 @@ The services are:
 # Setting Up Project
 
 1. Clone the master branch.
-2. Open up api and client folders in seperate command prompt windows.
+2. Open up api and client folders in separate command prompt windows.
 3. Install/Update any dependencies required for the project. ([Node.js](https://nodejs.org/en) is a pre-requisite).
 4. Update MONGO_URI and DB_NAME in the .env file according to your local mongo db database.
 5. Start both projects using "npm start" command.
