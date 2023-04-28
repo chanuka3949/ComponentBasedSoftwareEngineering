@@ -95,9 +95,9 @@ class UserForm extends Component {
     axios.post(`http://localhost:5000/api/users/`, userData).then(
       (response) => {
         let file = this.state.image;
-        if (file === undefined) return;
         let formData = new FormData();
         formData.append("file", file);
+        formData.append("title", file.name);
         formData.append("identifier", this.state.username);
         axios
           .post(`http://localhost:5000/api/files/`, formData, {
@@ -107,7 +107,8 @@ class UserForm extends Component {
           })
           .then(
             (response) => {
-              console.log("User Details Updated");
+              this.clearInputs();
+              console.log("User Details Saved");
             },
             (error) => {
               if (error.response) {

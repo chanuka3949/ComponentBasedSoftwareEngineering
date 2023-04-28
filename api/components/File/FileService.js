@@ -48,7 +48,6 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", upload.single("file"), async (req, res, next) => {
   try {
-    console.log(req.body.identifier);
     let obj = {
       title: req.body.title,
       contentType: req.file.mimetype,
