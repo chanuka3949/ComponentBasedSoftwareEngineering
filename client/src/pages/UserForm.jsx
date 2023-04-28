@@ -35,8 +35,6 @@ class UserForm extends Component {
   handleFileInput = (event) => {
     let nam = event.target.name;
     let val = event.target.files[0];
-    //onFileSelect(e.target.files[0])
-    //this.setState(e.target.files[0])
     this.setState({ [nam]: val });
   };
 
@@ -76,61 +74,55 @@ class UserForm extends Component {
           contactNumber: response.data.contactNumber ?? "",
           image: response.data.imageData ?? "",
           contentType: response.data.contentType ?? "",
-          // address1: response.data.address.address1??"",
-          // address2: response.data.address.address2??"",
-          // city: response.data.address.city??"",
-          // country: response.data.address.country??"",
-          // state: response.data.address.state??"",
-          // postalCode: response.data.address.postalCode??"",
         });
       },
       (error) => {
-        // if (error.response) {
-        //   console.log(error.response.data.message);
-        // }
+        if (error.response) {
+          console.log(error.response.data.message);
+        }
       }
     );
   }
   saveUserDetails = () => {
-    // let userData = {
-    //   username: this.state.username ?? "",
-    //   email: this.state.email ?? "",
-    //   firstName: this.state.firstName ?? "",
-    //   middleName: this.state.middleName ?? "",
-    //   lastName: this.state.lastName ?? "",
-    //   contactNumber: this.state.contactNumber ?? "",
-    //   image: this.state.image
-    // };
-    // axios.post(`http://localhost:5000/api/users/`, userData).then(
-    //   (response) => {
-    //     console.log("User Details Updated");
-    //   },
-    //   (error) => {
-    //     if (error.response) {
-    //       this.getProfileData();
-    //       console.log(error.response.data.message);
-    //     }
-    //   }
-    // );
-    let file = this.state.image;
-    let formData = new FormData();
-    formData.append("file", file);
-    axios
-      .post(`http://localhost:5000/api/files/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then(
-        (response) => {
-          console.log("User Details Updated");
-        },
-        (error) => {
-          if (error.response) {
-            console.log(error.response.data.message);
-          }
+    let userData = {
+      username: this.state.username,
+      email: this.state.email ?? "",
+      firstName: this.state.firstName ?? "",
+      middleName: this.state.middleName ?? "",
+      lastName: this.state.lastName ?? "",
+      contactNumber: this.state.contactNumber ?? "",
+    };
+    axios.post(`http://localhost:5000/api/users/`, userData).then(
+      (response) => {
+        let file = this.state.image;
+        if (file === undefined) return;
+        let formData = new FormData();
+        formData.append("file", file);
+        formData.append("identifier", this.state.username);
+        axios
+          .post(`http://localhost:5000/api/files/`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(
+            (response) => {
+              console.log("User Details Updated");
+            },
+            (error) => {
+              if (error.response) {
+                console.log(error.response.data.message);
+              }
+            }
+          );
+      },
+      (error) => {
+        if (error.response) {
+          this.getProfileData();
+          console.log(error.response.data.message);
         }
-      );
+      }
+    );
   };
   render() {
     return (
@@ -240,21 +232,6 @@ class UserForm extends Component {
                   />
                 </Form.Group>
               </Col>
-            </Row>
-            <Row>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                  name="address"
-                  type="text"
-                  value={this.state.address}
-                  n
-                  onChange={this.handleInput}
-                />
-              </Form.Group>
             </Row>
             <Row>
               <Form.Group controlId="formFile" className="mb-3">

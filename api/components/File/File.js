@@ -23,11 +23,10 @@ const fileSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  extension: {
+  referenceDocumentIdentifier: {
     type: String,
-    enum: Extension,
-    required: false,
-  }
+    required: true,
+  },
 });
 
 const File = mongoose.model("File", fileSchema);

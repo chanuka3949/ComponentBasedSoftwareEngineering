@@ -2,15 +2,13 @@ const file = require("./File");
 const express = require("express");
 const router = express.Router();
 const httpError = require("http-errors");
-const fs = require('fs');
+const fs = require("fs");
 var multer = require("multer");
 const path = require("path");
 
-var storage = multer.diskStorage({
-  
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
-    console.log(file)
   },
   filename: (req, file, cb) => {
     cb(
@@ -24,7 +22,7 @@ var storage = multer.diskStorage({
   },
 });
 
-var upload = multer({
+const upload = multer({
   storage: storage,
   fileFilter: function (req, file, callback) {
     var ext = path.extname(file.originalname);
@@ -48,25 +46,25 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-router.post("/", upload.single('file'), async (req, res, next) => {
-  var obj = {
-    title: req.body.title,
-    contentType: req.file.mimetype,
-    data: {
-      data: fs.readFileSync(
-        path.join(__dirname + "/../../uploads/" + req.file.filename)
-      ),
+router.post("/", upload.single("file"), async (req, res, next) => {
+  try {
+    console.log(req.body.identifier);
+    let obj = {
+      title: req.body.title,
       contentType: req.file.mimetype,
-    },
-  };
-  file.create(obj).then((err, item) => {
-    if (err) {
-      console.log(err);
-    } else {
-      // item.save();
-      res.send();
-    }
-  });
+      referenceDocumentIdentifier: req.body.identifier,
+      data: {
+        data: fs.readFileSync(
+          path.join(__dirname + "/../../uploads/" + req.file.filename)
+        ),
+        contentType: req.file.mimetype,
+      },
+    };
+    await file.create(obj);
+    res.send();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

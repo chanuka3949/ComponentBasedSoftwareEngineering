@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
   firstName: {
     type: String,
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique:true
+    unique: true,
   },
   picture: {
     type: String,
@@ -38,12 +38,12 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     type: addressSchema,
-    requred: false
+    requred: false,
   },
   contactNumber: {
     type: Number,
     required: true,
-    unique:true
+    unique: true,
   },
 });
 
