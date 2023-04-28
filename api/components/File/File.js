@@ -10,11 +10,7 @@ var Extension = {
 const fileSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: false,
-  },
-  description: {
-    type: String,
-    required: false,
+    required: true,
   },
   data: {
     data: Buffer,

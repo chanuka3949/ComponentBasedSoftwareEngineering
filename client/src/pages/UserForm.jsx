@@ -8,6 +8,7 @@ import Image from "react-bootstrap/Image";
 import axios from "axios";
 import { Buffer } from "buffer";
 import "./UserForm.css";
+import { toast } from "react-toastify";
 
 class UserForm extends Component {
   state = {
@@ -18,13 +19,7 @@ class UserForm extends Component {
     lastName: "",
     image: "",
     contentType: "",
-    address1: "",
-    address2: "",
-    city: "",
-    country: "",
-    state: "",
     contactNumber: "",
-    postalCode: "",
   };
 
   handleInput = (event) => {
@@ -48,19 +43,9 @@ class UserForm extends Component {
       lastName: "",
       image: "",
       contentType: "",
-      address1: "",
-      address2: "",
-      city: "",
-      country: "",
-      state: "",
       contactNumber: "",
-      postalCode: "",
     });
   };
-
-  // componentDidMount() {
-  //   this.getProfileData();
-  // }
 
   searchData = () => {
     let searchTerm = this.state.username;
@@ -74,27 +59,25 @@ class UserForm extends Component {
           lastName: response.data.lastName ?? "",
           contactNumber: response.data.contactNumber ?? "",
         });
+        axios
+          .get(`http://localhost:5000/api/files/${this.state.username}`)
+          .then(
+            (response) => {
+              this.setState({
+                image:
+                  `data:${response.data.contentType};base64,${Buffer.from(
+                    response.data.data
+                  ).toString("base64")}` ?? "",
+                contentType: response.data.contentType ?? "",
+              });
+            },
+            (error) => {
+              toast.info("User does not exist");
+            }
+          );
       },
       (error) => {
-        if (error.response) {
-          console.log(error.response.data.message);
-        }
-      }
-    );
-    axios.get(`http://localhost:5000/api/files/${this.state.username}`).then(
-      (response) => {
-        this.setState({
-          image:
-            `data:${response.data.contentType};base64,${Buffer.from(
-              response.data.data
-            ).toString("base64")}` ?? "",
-          contentType: response.data.contentType ?? "",
-        });
-      },
-      (error) => {
-        if (error.response) {
-          console.log(error.response.data.message);
-        }
+        toast.info("User does not exist");
       }
     );
   };
@@ -111,6 +94,10 @@ class UserForm extends Component {
     axios.post(`http://localhost:5000/api/users/`, userData).then(
       (response) => {
         let file = this.state.image;
+        if (file === null || file === "") {
+          toast.info("User details saved");
+          return;
+        }
         let formData = new FormData();
         formData.append("file", file);
         formData.append("title", file.name);
@@ -124,19 +111,15 @@ class UserForm extends Component {
           .then(
             (response) => {
               this.clearInputs();
-              console.log("User Details Saved");
+              toast.info("User details saved");
             },
             (error) => {
-              if (error.response) {
-                console.log(error.response.data.message);
-              }
+              toast.error("An error occurred");
             }
           );
       },
       (error) => {
-        if (error.response) {
-          console.log(error.response.data.message);
-        }
+        toast.error("An error occurred");
       }
     );
   };

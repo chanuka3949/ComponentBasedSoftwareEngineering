@@ -42,7 +42,12 @@ router.get("/:identifier", async (req, res, next) => {
     fileData = await file.findOne({
       referenceDocumentIdentifier: req.params.identifier,
     });
-    if (fileData.data.data === undefined || fileData.contentType == undefined)
+    if (
+      fileData === undefined ||
+      fileData.data === undefined ||
+      fileData.data.data === undefined ||
+      fileData.contentType == undefined
+    )
       res.send();
     else
       res.send({ data: fileData.data.data, contentType: fileData.contentType });

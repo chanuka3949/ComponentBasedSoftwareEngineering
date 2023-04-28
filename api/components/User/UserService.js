@@ -16,9 +16,12 @@ router.get("/", async (req, res, next) => {
 router.get("/:username", async (req, res, next) => {
   try {
     let user = await User.findOne({ username: req.params.username });
+    if (!user) {
+      throw httpError(404, "User does not exist in the system");
+    }
     res.send(user);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 });
 
@@ -34,25 +37,6 @@ router.post("/", async (req, res, next) => {
       contactNumber: req.body.contactNumber,
     });
     let user = await newUser.save();
-    res.send(user);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-router.put("/:username", async (req, res, next) => {
-  try {
-    let user = await User.findOne({ username: req.params.username });
-
-    if (!user) {
-      throw httpError(404, "User does not exist in the system");
-    }
-    if (typeof req.body.name === "undefined") {
-      user.set({ address: req.body.address });
-    } else {
-      user.set({ address: req.body.address, name: req.body.name });
-    }
-    user = await user.save();
     res.send(user);
   } catch (error) {
     console.log(error);

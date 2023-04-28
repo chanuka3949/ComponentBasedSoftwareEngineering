@@ -17,7 +17,7 @@ app.use("/api/users", UserService);
 app.use("/api/files", FileService);
 
 //Error Handling
-//app.use(errorHandler);
+app.use(errorHandler);
 
 //Connect to Database
 connectToDatabase();
