@@ -16,8 +16,12 @@ const fileSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  file: {
+  data: {
     data: Buffer,
+  },
+  contentType: {
+    type: String,
+    required: true,
   },
   extension: {
     type: String,

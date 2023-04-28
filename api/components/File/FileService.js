@@ -7,8 +7,10 @@ var multer = require("multer");
 const path = require("path");
 
 var storage = multer.diskStorage({
+  
   destination: (req, file, cb) => {
     cb(null, "uploads");
+    console.log(file)
   },
   filename: (req, file, cb) => {
     cb(
@@ -46,15 +48,15 @@ router.get("/", async (req, res, next) => {
   });
 });
 
-router.post("/", upload.single('image'), async (req, res, next) => {
-  console.log(req.body);
+router.post("/", upload.single('file'), async (req, res, next) => {
   var obj = {
     title: req.body.title,
+    contentType: req.file.mimetype,
     data: {
       data: fs.readFileSync(
-        path.join(__dirname + "/uploads/" + req.file.filename)
+        path.join(__dirname + "/../../uploads/" + req.file.filename)
       ),
-      contentType: "image/png",
+      contentType: req.file.mimetype,
     },
   };
   file.create(obj).then((err, item) => {
