@@ -18,7 +18,7 @@ router.get("/:username", async (req, res, next) => {
     let user = await User.findOne({ username: req.params.username });
 
     if (!user) {
-      res.send("User does not exist in the system")
+      res.send("User does not exist in the system");
     }
     res.send(user);
   } catch (error) {

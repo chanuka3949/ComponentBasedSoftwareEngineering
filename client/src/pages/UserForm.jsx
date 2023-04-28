@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import axios from "axios";
+import { Buffer } from "buffer";
 import "./UserForm.css";
 
 class UserForm extends Component {
@@ -62,9 +63,8 @@ class UserForm extends Component {
   }
 
   getProfileData() {
-    axios.get(`http://localhost:5000/api/users/csds`).then(
+    axios.get(`http://localhost:5000/api/files/csds`).then(
       (response) => {
-        console.log(response);
         this.setState({
           username: response.data.username ?? "",
           email: response.data.email ?? "",
@@ -72,7 +72,10 @@ class UserForm extends Component {
           middleName: response.data.middleName ?? "",
           lastName: response.data.lastName ?? "",
           contactNumber: response.data.contactNumber ?? "",
-          image: response.data.imageData ?? "",
+          image:
+            `data:${response.data.contentType};base64,${Buffer.from(
+              response.data.data
+            ).toString("base64")}` ?? "",
           contentType: response.data.contentType ?? "",
         });
       },
@@ -82,6 +85,25 @@ class UserForm extends Component {
         }
       }
     );
+    // axios.get(`http://localhost:5000/api/users/csds`).then(
+    //   (response) => {
+    //     this.setState({
+    //       username: response.data.username ?? "",
+    //       email: response.data.email ?? "",
+    //       firstName: response.data.firstName ?? "",
+    //       middleName: response.data.middleName ?? "",
+    //       lastName: response.data.lastName ?? "",
+    //       contactNumber: response.data.contactNumber ?? "",
+    //       image: response.data.imageData ?? "",
+    //       contentType: response.data.contentType ?? "",
+    //     });
+    //   },
+    //   (error) => {
+    //     if (error.response) {
+    //       console.log(error.response.data.message);
+    //     }
+    //   }
+    // );
   }
   saveUserDetails = () => {
     let userData = {
@@ -119,7 +141,6 @@ class UserForm extends Component {
       },
       (error) => {
         if (error.response) {
-          this.getProfileData();
           console.log(error.response.data.message);
         }
       }
@@ -130,12 +151,7 @@ class UserForm extends Component {
       <>
         <h2 className="page-title">User Profile</h2>
         <Form className="form">
-          <Image
-            className="user-image"
-            src="data:image/<%=image.img.contentType%>;base64,
-            <%=image.img.data.toString('base64')%>"
-            roundedCircle
-          />
+          <Image className="user-image" src={this.state.image} roundedCircle />
           <Container>
             <Row>
               <Col>
